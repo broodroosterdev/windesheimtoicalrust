@@ -5,7 +5,7 @@ pub struct Les {
     pub starttijd: u64,
     pub eindtijd: u64,
     pub changed: bool,
-    pub docentcode: Option<Vec<String>>,
+    pub docentcode: Option<String>,
     pub roosterdatum: String,
     pub commentaar: String,
     pub status: bool,
