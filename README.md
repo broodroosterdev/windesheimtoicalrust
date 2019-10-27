@@ -3,6 +3,21 @@
 This repo contains a work in progress port of the windesheimtoical project to rust. The windesheimtoical project was built to convert a windesheim schedule into a ical file to allow users to view their schedule in their preferred calender program.
 
 
+## File structure
+```js
+windesheimtoicalrust:
+│   README.md //This readme :)
+│   .gitignore //What files to ignore. Primarily ignores rust's build directories
+│
+└───api
+    │   Cargo.toml //Where the dependencies are defined
+    │
+    └───src
+        │   api.rs //All the stuff needed for windesheim's api (Getting the json data and parsing it)
+        │   les.rs //Where the Les struct lives
+        │   rooster.rs //Everything related to creating the Rooster struct and transforming it into a ical file
+        │   main.rs //Where the webserver part lives, brings all files together
+```
 ## Used Libraries
 
 
