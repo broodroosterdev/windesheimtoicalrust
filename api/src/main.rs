@@ -3,50 +3,38 @@
 #[macro_use] extern crate serde_derive;
 
 extern crate reqwest;
-extern crate web_ical;
 
 mod les;
 mod api;
+mod rooster;
+use rooster::*;
 
-use rocket::http::ContentType;
-use rocket::response::Content;
-use rocket::response::Redirect;
-
-#[get("/<code>")]
-fn default(code: String) -> Redirect {
-    Redirect::to(uri!(klas: code))
-}
 
 #[get("/<code>")]
-fn klas(code: String) -> rocket::response::Content<std::fs::File>{
-    Content(
-        ContentType::Calendar, 
-        api::get_ical(code, api::Rooster::Klas)
-    )
+fn default(code: String) -> IcalResponder {
+    Rooster::from_klascode(code, RoosterType::Klas).to_responder()
 }
 
-#[get("/<code>")]
-fn docent(code: String) -> rocket::response::Content<std::fs::File>{
-    Content(
-        ContentType::Calendar, 
-        api::get_ical(code, api::Rooster::Docent)
-    )
+#[get("/klas/<code>")]
+fn klas(code: String) -> IcalResponder{
+    Rooster::from_klascode(code, RoosterType::Klas).to_responder()
 }
 
-#[get("/<code>")]
-fn vak(code: String) -> rocket::response::Content<std::fs::File>{
-    Content(
-        ContentType::Calendar, 
-        api::get_ical(code, api::Rooster::Vak)
-    )
+#[get("/docent/<code>")]
+fn docent(code: String) -> IcalResponder{
+    Rooster::from_klascode(code, RoosterType::Docent).to_responder()
 }
 
+#[get("/vak/<code>")]
+fn vak(code: String) -> IcalResponder{
+    Rooster::from_klascode(code, RoosterType::Vak).to_responder()
+}
 
 fn main() {
     rocket::ignite()
         .mount("/", routes![default])
-        .mount("/klas", routes![klas])
-        .mount("/docent", routes![docent])
-        .mount("/vak", routes![vak])
+        .mount("/", routes![klas])
+        .mount("/", routes![docent])
+        .mount("/", routes![vak])
         .launch();
 }
